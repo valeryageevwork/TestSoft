@@ -39,9 +39,9 @@ public static class MinSumSolver
     /// <exception cref="InvalidOperationException">
     /// Бросается, если найден NaN или Infinity, или уникальных значений меньше двух.
     /// </exception>
-    private static List<double> GetUniques(double[] arr)
+    private static LinkedList<double> GetUniques(double[] arr)
     {
-        var uniques = new List<double>();
+        var uniques = new LinkedList<double>();
 
         foreach (double x in arr)
         {
@@ -58,7 +58,7 @@ public static class MinSumSolver
                     break;
                 }
             if (isUnique)
-                uniques.Add(x);
+                uniques.AddLast(x);
         }
         // Должно быть как минимум два уникальных значения
         if (uniques.Count < 2)
