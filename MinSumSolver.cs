@@ -24,7 +24,7 @@ public static class MinSumSolver
         if (double.IsInfinity(threshold))
         {
             // Только если diff тоже бесконечность, значит числа непредставимо большие, и условно равны
-            return diff == double.PositiveInfinity;
+            return double.IsInfinity(diff);
         }
         
         return diff <= threshold;
@@ -45,9 +45,9 @@ public static class MinSumSolver
 
         foreach (double x in arr)
         {
-            // Проверка на недопустимые значения (NaN, Infinity)
+            // Проверка на недопустимые значения (NaN, Infinity) или меньше, чем заданная точность
             if (double.IsNaN(x) || double.IsInfinity(x))
-                throw new ArgumentException("Array contains NaN or Infinity.");
+                throw new ArgumentException("Проверьте выход за границы.");
 
             // Проверка числа на уникальность с учетом AlmostEqual
             bool isUnique = true;
@@ -62,7 +62,7 @@ public static class MinSumSolver
         }
         // Должно быть как минимум два уникальных значения
         if (uniques.Count < 2)
-            throw new ArgumentException("Array must contain at least two unique elements (with respect to precision).");
+            throw new ArgumentException("Массив должен содержать хотя бы два уникальных элемента в соотв. с точностью.");
 
         return uniques;
     }
@@ -80,7 +80,7 @@ public static class MinSumSolver
     {
         // Проверка: массив должен содержать хотя бы два элемента
         if (arr?.Length < 2 || arr == null)
-            throw new ArgumentException("Array must contain at least two elements.");
+            throw new ArgumentException("Массив должен содержать хотя бы два элемента.");
 
         // Получить список уникальных значений
         var uniques = GetUniques(arr);
@@ -101,7 +101,12 @@ public static class MinSumSolver
                 min2 = x;    // новый второй минимум
             }
         }
-        // Суммируем два самых маленьких уникальных значения
-        return min1 + min2;
+        
+        double sum = min1 + min2;
+        
+        if (double.IsInfinity(sum))
+            throw new ArgumentException("Сумма двух минимальных уникальных значений превышает диапазон double.");
+        
+        return sum;
     }
 }
